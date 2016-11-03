@@ -6,4 +6,6 @@
 
     <string name="action_settings">Settings</string>
     <string name="side_nave_descrition">Agencia Arrendatur</string>
+    <string name="app_update">Actualizar</string>
+    <string name="app_cancel">Cancelar</string>
 </resources>

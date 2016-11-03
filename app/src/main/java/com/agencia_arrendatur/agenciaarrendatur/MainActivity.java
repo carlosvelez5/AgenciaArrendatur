@@ -1,5 +1,9 @@
 package com.agencia_arrendatur.agenciaarrendatur;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -121,6 +125,7 @@ public class MainActivity extends AppCompatActivity
                     // Obtener variables
                     boolean load = object.getBoolean("load");
                     String type = object.getString("type");
+                    boolean updateVersion = object.getBoolean("update_version");
 
                     // Si hay que actualizar
                     if (load && type.equals("outdated")) {
@@ -137,6 +142,11 @@ public class MainActivity extends AppCompatActivity
                     } else {
                         // nada que hacer
                         Log.d("appArrendatur", "Configuración: nada!");
+                    }
+
+                    // Invitar al usuario a actualizar la app
+                    if (updateVersion) {
+                        inviteUserUpdate(object.getString("opt_update"));
                     }
 
                 } catch (JSONException e) {
@@ -201,6 +211,48 @@ public class MainActivity extends AppCompatActivity
         // Crear objeto
         Gson gson = new GsonBuilder().create();
         SettingsBase settObj = gson.fromJson(result, SettingsBase.class);
+    }
+
+    /**
+     * Invita al usuario a actualizar la app
+     *
+     * @param strUpdate, JSON con el título y otras opciones para el dialogo
+     */
+    public void inviteUserUpdate(String strUpdate) {
+        try {
+            final JSONObject opts = new JSONObject(strUpdate);
+            final Uri _goto = Uri.parse(opts.getString("url"));
+
+            // Crear dialogo
+            final AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+
+            // Agregar título
+            dialog.setTitle(opts.getString("title"));
+            dialog.setMessage(opts.getString("content"));
+
+            dialog.setPositiveButton(R.string.app_update, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    // Mandar el usuario para el playstore
+                    Intent gotoPlayStore = new Intent(Intent.ACTION_VIEW, _goto);
+                    // Enviar
+                    startActivity(gotoPlayStore);
+                }
+            });
+
+            dialog.setNegativeButton(R.string.app_cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+
+            // Mostrar dialogo
+            dialog.create().show();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
