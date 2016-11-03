@@ -2,24 +2,52 @@ package com.agencia_arrendatur.agenciaarrendatur;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Iterator;
+
+import cz.msebera.android.httpclient.Header;
+
+import static java.lang.Integer.parseInt;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    // Manejardor de la BD
+    private DBAdapter mDBAdapter;
+
+    private String jsonDefault = "{\"versionDB\":\"0\",\"urls\":{\"domain\":\"http:\\/\\/agencia-arrendatur.com\",\"web_home\":\"\\/inicio\\/\",\"web_inst\":\"\\/sobre-nosotros\\/\",\"web_news\":\"\\/publicaciones\\/\",\"web_tours\":\"\\/turismo\\/\",\"web_rental\":\"\\/inmobiliaria\\/\",\"web_contact\":\"\\/contactanos\\/\"}}";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Cargar configuración de la base de datos
+        mDBAdapter = new DBAdapter(this);
+        mDBAdapter.open();
+
+        // cargar configuración
+        onLoadSettings();
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -40,6 +68,114 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    // Cargar configuracion de la base de datos
+    private void onLoadSettings() {
+        // Url
+        int versionDB;
+
+        // Cargar configuracion de la BD
+        SettingsObj settingVersion = mDBAdapter.fetchSettingBykey("versionDB");
+        int count = settingVersion.getLength();
+
+        if (!(count > 0)) {
+            // para forzar actualización de la BD
+            versionDB = 0;
+        } else {
+            versionDB = parseInt(settingVersion.getKeyValue());
+        }
+
+        // Cargar archivo utilizando esta clase
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        // Agregar unos parámetros
+        RequestParams paramsMap = new RequestParams();
+
+        // Obtener la versión
+        paramsMap.put("load", "settings");
+        paramsMap.put("versionCurrent", versionDB);
+        paramsMap.put("versionCode", BuildConfig.VERSION_CODE);
+        paramsMap.put("versionName", BuildConfig.VERSION_NAME);
+        paramsMap.put("aplicationId", BuildConfig.APPLICATION_ID);
+
+        // Cargar archivo por el metodo POST
+        String urlLoad = "http://192.168.1.1/arrendatur/appmobile/get-config/";
+
+        client.post(urlLoad, paramsMap, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                // se cargó correctamente
+                try {
+                    // Crear objecto
+                    JSONObject object = new JSONObject(new String(responseBody).trim());
+
+                    // Obtener variables
+                    boolean load = object.getBoolean("load");
+                    String type = object.getString("type");
+
+                    // Si hay que actualizar
+                    if (load && type.equals("outdated")) {
+                        // Insertar
+                        insertConfig(object.getString("data"));
+
+                        // Obtener valor
+                        Log.d("appArrendatur", "La configuración fue actualizada!");
+
+                    } else if (load && type.equals("updated")) {
+                        // la configuracion de la app esta actualizada
+                        Log.d("appArrendatur", "La configuración estaba actualizada");
+
+                    } else {
+                        // nada que hacer
+                        Log.d("appArrendatur", "Dejarla como esta");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                // Insertar en la BD
+                insertConfig(jsonDefault);
+
+                // config por defecto
+                Log.d("appArrendatur", "Configuración por defecto");
+            }
+        });
+    }
+
+    /**
+     * Inserta la configuracion en la BD
+     *
+     * @param result String, Json para agregar a la base de datos
+     */
+    public void insertConfig(String result) {
+        // Obtener datos
+        JSONObject data;
+
+        try {
+            // Borrar todos los registros
+            mDBAdapter.deleteAllSettings();
+
+            data = new JSONObject(result);
+
+            // Recorrer objeto
+            Iterator<?> keys = data.keys();
+
+            while (keys.hasNext()) {
+                // Obtener clave
+                String key = (String) keys.next();
+                String val = data.get(key).toString();
+
+                // Agregar a la base de datod
+                mDBAdapter.addSettings(key, val, "settings");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

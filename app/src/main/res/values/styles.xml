@@ -19,6 +19,9 @@
 
     <style name="AgencyTheme" parent="AppTheme">
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
     </style>
+
+    <style name="AgencyTheme.AppTheme.NoActionBar" parent="AppTheme.NoActionBar"/>
 
 </resources>

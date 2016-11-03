@@ -12,10 +12,33 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.agencia_arrendatur.agenciaarrendatur.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/main_bar_top">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"/>
+
+    <Button
+        android:id="@+id/loadJson"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView2"
+        android:layout_marginLeft="18dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="38dp"
+        android:text="Cargar JSON"/>
+
+    <Button
+        android:text="Borrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/loadJson"
+        android:layout_toRightOf="@+id/loadJson"
+        android:layout_toEndOf="@+id/loadJson"
+        android:layout_marginLeft="26dp"
+        android:layout_marginStart="26dp"
+        android:id="@+id/clear"/>
 </RelativeLayout>
