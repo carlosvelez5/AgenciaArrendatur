@@ -14,9 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.json.baseclass.SettingsBase;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.utility.DBAdapter;
+import com.utility.SettingsObj;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -79,7 +84,10 @@ public class MainActivity extends AppCompatActivity
         SettingsObj settingVersion = mDBAdapter.fetchSettingBykey("versionDB");
         int count = settingVersion.getLength();
 
-        if (!(count > 0)) {
+        // Existen datos en la BD
+        final Boolean existsData = count > 0;
+
+        if (!existsData) {
             // para forzar actualización de la BD
             versionDB = 0;
         } else {
@@ -120,15 +128,15 @@ public class MainActivity extends AppCompatActivity
                         insertConfig(object.getString("data"));
 
                         // Obtener valor
-                        Log.d("appArrendatur", "La configuración fue actualizada!");
+                        Log.d("appArrendatur", "Configuración: fue Actualizada!");
 
                     } else if (load && type.equals("updated")) {
                         // la configuracion de la app esta actualizada
-                        Log.d("appArrendatur", "La configuración estaba actualizada");
+                        Log.d("appArrendatur", "Configuración: Actualizada!");
 
                     } else {
                         // nada que hacer
-                        Log.d("appArrendatur", "Dejarla como esta");
+                        Log.d("appArrendatur", "Configuración: nada!");
                     }
 
                 } catch (JSONException e) {
@@ -138,11 +146,17 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                // Insertar en la BD
-                insertConfig(jsonDefault);
+                // Si no se ha podido cargar el archivo, pero hay configuración, dejarla como este
+                if (existsData) {
+                    // config por defecto
+                    Log.d("appArrendatur", "Configuración: Igual!");
+                } else {
+                    // Si no se ha podido cargar el archivo, y no hay en la bd, insertar una por default
+                    insertConfig(jsonDefault);
 
-                // config por defecto
-                Log.d("appArrendatur", "Configuración por defecto");
+                    // config por defecto
+                    Log.d("appArrendatur", "Configuración: Default!");
+                }
             }
         });
     }
@@ -160,6 +174,7 @@ public class MainActivity extends AppCompatActivity
             // Borrar todos los registros
             mDBAdapter.deleteAllSettings();
 
+            // Covertir a objeto
             data = new JSONObject(result);
 
             // Recorrer objeto
@@ -173,9 +188,19 @@ public class MainActivity extends AppCompatActivity
                 // Agregar a la base de datod
                 mDBAdapter.addSettings(key, val, "settings");
             }
+
+            // Organizar menú
+            setMenu(result);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setMenu(String result) {
+        // Crear objeto
+        Gson gson = new GsonBuilder().create();
+        SettingsBase settObj = gson.fromJson(result, SettingsBase.class);
     }
 
     @Override

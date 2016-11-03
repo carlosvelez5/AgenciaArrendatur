@@ -1,4 +1,4 @@
-package com.agencia_arrendatur.agenciaarrendatur;
+package com.utility;
 
 /**
  * Created by Carlos VÉLEZ on 01/11/2016.

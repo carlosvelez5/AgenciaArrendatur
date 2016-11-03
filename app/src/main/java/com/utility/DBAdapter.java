@@ -1,4 +1,4 @@
-package com.agencia_arrendatur.agenciaarrendatur;
+package com.utility;
 
 import android.content.ContentValues;
 import android.content.Context;
