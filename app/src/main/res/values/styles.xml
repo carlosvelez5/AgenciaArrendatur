@@ -24,4 +24,138 @@
 
     <style name="AgencyTheme.AppTheme.NoActionBar" parent="AppTheme.NoActionBar"/>
 
+    <!-- Barra verde -->
+    <style name="nav_top_green" parent="boxShadown1">
+        <item name="android:textColor">#f2ffdd</item>
+        <item name="android:shadowColor">#ffffff</item>
+    </style>
+
+    <!-- Utilidades -->
+    <style name="boxShadown1">
+        <item name="android:shadowDx">3</item>
+        <item name="android:shadowDy">3</item>
+        <item name="android:shadowRadius">1</item>
+    </style>
+
+    <!-- Estilos para el form de contacto -->
+    <style name="wrap_contact">
+        <item name="android:background">#f1f1f1</item>
+    </style>
+
+    <style name="contact_item_form">
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:background">#efefef</item>
+        <item name="android:layout_marginBottom">20dp</item>
+    </style>
+
+    <style name="contact_ligth">
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:background">#dae2eceb</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+
+    <style name="contact_error">
+        <item name="android:background">#19ff0004</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:layout_margin">0dp</item>
+    </style>
+
+    <style name="contact_error.padding">
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textColor">#ae3636</item>
+    </style>
+
+    <style name="contact_info">
+        <item name="android:layout_marginBottom">15dp</item>
+        <item name="android:textColor">#8e8e8e</item>
+    </style>
+
+    <style name="contact_item">
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="contact_item.base">
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+    </style>
+
+    <style name="contact_item.base.input" parent="contact_item.base">
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#555</item>
+        <item name="android:textColorHint">#acacac</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:background">#fff</item>
+    </style>
+
+    <style name="contact_item.input" parent="contact_item.base.input">
+        <item name="android:layout_height">46dp</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="contact_item.input.textarea" parent="contact_item.base.input">
+        <item name="android:gravity">left|top</item>
+    </style>
+
+    <style name="contact_item.label" parent="contact_item.base">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#3e3434</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:layout_width">50dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">46dp</item>
+    </style>
+
+    <style name="contact_msg" parent="boxShadown1">
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#3e3e3e</item>
+        <item name="android:shadowColor">#b7dadada</item>
+    </style>
+
+    <style name="from_separator">
+        <item name="android:layout_height">12dp</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="from_separator_icon">
+        <item name="android:background">#CCC</item>
+        <item name="android:layout_width">2px</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="contact_item.btn.green" parent="boxShadown1">
+        <item name="android:textColor">#fcfff5</item>
+        <item name="android:shadowColor">#d1669900</item>
+        <item name="android:textStyle">normal|bold</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+    </style>
+    <!-- End Estilos contacto -->
+
+
+    <style name="AgencyTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AgencyTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AgencyTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 </resources>

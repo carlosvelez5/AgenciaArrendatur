@@ -4,8 +4,33 @@
     <string name="navigation_drawer_open">Abrir menú</string>
     <string name="navigation_drawer_close">Cerrar menú</string>
 
+    <!-- Icono -->
+    <string name="fa_user">{icon-user}</string>
+    <string name="fa_envelope_o">{icon-envelope}</string>
+    <string name="fa_arrow_right">{icon-speech}</string>
+    <string name="fa_comment_o">{icon-note}</string>
+
     <string name="action_settings">Settings</string>
     <string name="side_nave_descrition">Agencia Arrendatur</string>
     <string name="app_update">Actualizar</string>
     <string name="app_cancel">Cancelar</string>
+
+    <!-- Contacto -->
+    <string name="title_activity_contact_form">Contáctanos</string>
+    <string name="contact_btn_send">Enviar</string>
+    <string name="contact_msg_hint">Soy todo oídos…</string>
+    <string name="contact_subjet_hint">¿Qué nos quieres escribir?</string>
+    <string name="contact_email_hint">¿Cómo es tu dirección de email?</string>
+    <string name="contact_name_hint">¿Cuál es tu nombre?</string>
+    <string name="contact_msg_top">¿Quieres enviarnos alguna PSQR?</string>
+    <string name="contact_title">Contactanos</string>
+    <string name="contact_info">Agradecemos las peticiones, sugerencias, quejas o reclamos que nos pueda enviar. Por favor usa el siguiente formulario para hacernos saber lo que piensas de nuestra empresa.</string>
+    <string name="contact_error_name">Por favor, escribe tu nombre</string>
+    <string name="contact_error_email">Por favor, escribe tu email</string>
+    <string name="contact_error_subjet">¿Cual es tu motivo de escribirnos?</string>
+    <string name="contact_error_text">Tu mensaje es demasiado corto!</string>
+    <string name="contact_error_email_invalid">Tu correo no está bien :\'(</string>
+    <string name="contact_error_url">¡Lo sentimos!, en este momento no podemos procesar tu información</string>
+    <string name="contact_error_network">¡No nos pudimos conectar!\nPor favor, revisa tu conexión e inténtalo de nuevo</string>
+    <string name="btn_ok">Volver</string>
 </resources>

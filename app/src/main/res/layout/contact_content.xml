@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_contact_form"
+    style="@style/wrap_contact"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="0dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.agencia_arrendatur.agenciaarrendatur.ContactFormActivity"
+    tools:showIn="@layout/contact_all">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="12dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                style="@style/contact_ligth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/contact_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/contact_msg_top"
+                    />
+
+                <com.bluejamesbond.text.DocumentView xmlns:ext="http://schemas.android.com/apk/res-auto"
+                                                     style="@style/contact_info"
+                                                     android:layout_width="match_parent"
+                                                     android:layout_height="wrap_content"
+                                                     android:layout_weight="1"
+                                                     android:text="@string/contact_info"
+                                                     ext:documentView_text="@string/contact_info"
+                                                     ext:documentView_textAlignment="justified"
+                                                     ext:documentView_textColor="#6b6b6b"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/contact_info"
+                style="@style/contact_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/contact_text_info"
+                    style="@style/contact_error.padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/contact_item_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/contact_from_border"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    style="@style/contact_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/wrap_border"
+                    >
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        android:id="@+id/icon_user"
+                        style="@style/contact_item.label"
+                        android:text="@string/fa_user"/>
+
+                    <LinearLayout
+                        style="@style/from_separator_icon">
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/form_nameuser"
+                        style="@style/contact_item.input"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:hint="@string/contact_name_hint"
+                        android:inputType="text"/>
+                </LinearLayout>
+
+                <TextView
+                    style="@style/from_separator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <LinearLayout
+                    style="@style/contact_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/wrap_border"
+                    >
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        android:id="@+id/icon_email"
+                        style="@style/contact_item.label"
+                        android:text="@string/fa_envelope_o"/>
+
+                    <LinearLayout
+                        style="@style/from_separator_icon">
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/form_email"
+                        style="@style/contact_item.input"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:hint="@string/contact_email_hint"
+                        android:inputType="textEmailAddress"/>
+                </LinearLayout>
+
+                <TextView
+                    style="@style/from_separator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <LinearLayout
+                    style="@style/contact_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/wrap_border"
+                    >
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        android:id="@+id/icon_subjet"
+                        style="@style/contact_item.label"
+                        android:text="@string/fa_arrow_right"/>
+
+                    <LinearLayout
+                        style="@style/from_separator_icon">
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/form_subjet"
+                        style="@style/contact_item.input"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:hint="@string/contact_subjet_hint"
+                        android:inputType="text"/>
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/from_separator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <LinearLayout
+                    style="@style/contact_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/wrap_border"
+                    >
+
+                    <com.joanzapata.iconify.widget.IconTextView
+                        android:id="@+id/icon_msg"
+                        style="@style/contact_item.label"
+                        android:text="@string/fa_comment_o"/>
+
+                    <LinearLayout
+                        style="@style/from_separator_icon">
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/form_text"
+                        style="@style/contact_item.input.textarea"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/contact_msg_hint"
+                        android:inputType="textMultiLine"
+                        android:minHeight="80dp"
+                        />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/from_separator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonSend"
+                style="@style/contact_item.btn.green"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/btn_green_ligth"
+                android:text="@string/contact_btn_send"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

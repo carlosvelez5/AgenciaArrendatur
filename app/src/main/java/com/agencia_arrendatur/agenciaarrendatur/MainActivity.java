@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -42,12 +41,12 @@ public class MainActivity extends AppCompatActivity
     // Manejardor de la BD
     private DBAdapter mDBAdapter;
 
-    private String jsonDefault = "{\"versionDB\":\"0\",\"urls\":{\"domain\":\"http:\\/\\/agencia-arrendatur.com\",\"web_home\":\"\\/inicio\\/\",\"web_inst\":\"\\/sobre-nosotros\\/\",\"web_news\":\"\\/publicaciones\\/\",\"web_tours\":\"\\/turismo\\/\",\"web_rental\":\"\\/inmobiliaria\\/\",\"web_contact\":\"\\/contactanos\\/\"}}";
+    private String jsonDefault = "{\"versionDB\":\"0\",\"urls\":{\"domain\":\"http:\\/\\/agencia-arrendatur.com\",\"web_home\":\"\\/inicio\\/\",\"web_inst\":\"\\/sobre-nosotros\\/\",\"web_news\":\"\\/publicaciones\\/\",\"web_tours\":\"\\/turismo\\/\",\"web_rental\":\"\\/inmobiliaria\\/\",\"web_contact\":\"\\/contactanos\\/\",\"app_contact\":\"\\/appMobile\\/send-contact\\/\"}}";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_base);
 
         // Cargar configuración de la base de datos
         mDBAdapter = new DBAdapter(this);
@@ -56,16 +55,16 @@ public class MainActivity extends AppCompatActivity
         // cargar configuración
         onLoadSettings();
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // Abrir activity de contacto
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(MainActivity.this, ContactFormActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -112,7 +111,8 @@ public class MainActivity extends AppCompatActivity
         paramsMap.put("aplicationId", BuildConfig.APPLICATION_ID);
 
         // Cargar archivo por el metodo POST
-        String urlLoad = "http://192.168.1.1/arrendatur/appmobile/get-config/";
+        //String urlLoad = "http://10.21.21.148/arrendatur/appmobile/get-config/";
+        String urlLoad = "http://www.agencia-arrendatur.com/appMobile/get-config/";
 
         client.post(urlLoad, paramsMap, new AsyncHttpResponseHandler() {
             @Override
@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 

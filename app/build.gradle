@@ -27,7 +27,18 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.android.support:design:25.0.0'
     testCompile 'junit:junit:4.12'
+
+    // Para cargar archivos HTML
     compile 'com.loopj.android:android-async-http:1.4.9'
+
+    // Para los iconos
+    // https://github.com/JoanZapata/android-iconify
+    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2' // (v4.5)
+    compile 'com.joanzapata.iconify:android-iconify-simplelineicons:2.2.2' // (v1.0.0)
+
+    // Para justificar texto
+    // https://github.com/bluejamesbond/TextJustify-Android
+    compile 'com.github.bluejamesbond:textjustify-android:2.1.6'
 }
 
 android {

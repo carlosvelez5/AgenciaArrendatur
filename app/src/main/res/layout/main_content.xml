@@ -12,7 +12,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.agencia_arrendatur.agenciaarrendatur.MainActivity"
-    tools:showIn="@layout/main_bar_top">
+    tools:showIn="@layout/main_all">
 
     <TextView
         android:layout_width="wrap_content"

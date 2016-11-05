@@ -12,4 +12,5 @@ public class SettingsUrl {
     public String web_tours;
     public String web_rental;
     public String web_contact;
+    public String app_contact;
 }
