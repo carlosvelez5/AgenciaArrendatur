@@ -1,7 +1,5 @@
 package com.agencia_arrendatur.agenciaarrendatur;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -9,60 +7,74 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
-import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.joanzapata.iconify.fonts.FontAwesomeModule;
-import com.joanzapata.iconify.fonts.SimpleLineIconsModule;
 import com.json.baseclass.SettingsUrl;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.utility.ConsoleLog;
 import com.utility.DBAdapter;
 import com.utility.SettingsObj;
+import com.utility.Utility;
+import com.utility.UtilityNetwork;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
-import static com.joanzapata.iconify.Iconify.with;
-
 public class ContactFormActivity extends AppCompatActivity {
     boolean _continue = true;
     private DBAdapter mDBAdapter;
     private LinearLayout mLinearLayoutError;
+    private LinearLayout mLinearLayoutAlert;
     private TextView mTextInfo;
     private ProgressDialog mProgressDialog;
+    private ScrollView mScrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Iniciar iconos
-        with(new FontAwesomeModule())
-                .with(new SimpleLineIconsModule());
+        // Iniciar inconos
+        Utility.iniIcons();
 
         setContentView(R.layout.contact_all);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_contact);
         setSupportActionBar(toolbar);
 
         // layout para mostrar los errores
-        mLinearLayoutError = (LinearLayout) findViewById(R.id.contact_info);
-        mTextInfo = (TextView) findViewById(R.id.contact_text_info);
+        mLinearLayoutError = (LinearLayout) findViewById(R.id.wrap_msg_error);
+        mLinearLayoutAlert = (LinearLayout) findViewById(R.id.wrap_msg_alert);
+        mTextInfo = (TextView) findViewById(R.id.wrap_msg_error_text);
         mProgressDialog = new ProgressDialog(ContactFormActivity.this);
+        mScrollView = (ScrollView) findViewById(R.id.scrollContact);
+
+        // comprobar si hay conexion a internet
+        if (UtilityNetwork.isOnline(this)) {
+            // Oculto el mensaje
+            Utility.toggleLayout(mLinearLayoutAlert, 0, false);
+        } else {
+            // Le Agrego el texto y lo muestro por 10 segundos
+            TextView textViewAlert = (TextView) findViewById(R.id.wrap_msg_alert_text);
+            textViewAlert.setText(R.string.network_offline);
+
+            // Ocultar
+            Utility.toggleLayout(mLinearLayoutAlert, 0, true, true, 10*1000, 800);
+        }
 
         // ocultar
-        showLayout(0, false);
+        Utility.toggleLayout(mLinearLayoutError, 0, false);
 
         // Cargar
         final Button buttonSend = (Button) findViewById(R.id.buttonSend);
@@ -75,57 +87,13 @@ public class ContactFormActivity extends AppCompatActivity {
         });
     }
 
-    // Sobre escribir
-    public void showLayout(final int duration, boolean show) {
-        showLayout(duration, show, false, 0, 0);
-    }
-
-    // oculta o muestra
-    public void showLayout(final int duration, boolean show, final boolean autoHide, final int delay, final int durationHide) {
-        if (show) {
-            mLinearLayoutError.animate()
-                    //.translationY(mLinearLayoutError.getHeight())
-                    .alpha(1.0f)
-                    .setDuration(duration)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-                            super.onAnimationStart(animation);
-                            mLinearLayoutError.setVisibility(View.VISIBLE);
-                            mLinearLayoutError.setAlpha(0.0f);
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            if (autoHide) {
-                                new android.os.Handler().postDelayed(
-                                        new Runnable() {
-                                            public void run() {
-                                                showLayout(durationHide, false, false, 0, 0);
-                                            }
-                                        },
-                                        delay);
-                            }
-                        }
-                    });
-        } else {
-            mLinearLayoutError.animate()
-                    //.translationY(0) //.translationYBy(mLinearLayoutError.getHeight())
-                    .alpha(0.0f).setDuration(duration)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            mLinearLayoutError.setVisibility(View.GONE);
-                        }
-                    });
-        }
-    }
-
     public void sendMsgAction(View v, final Button buttonSend) {
         // Desactivar boton
         buttonSend.setEnabled(false);
+
+        //Ocultar teclado y subir scroll
+        Utility.toogleBoard(false, v, this);
+        mScrollView.scrollTo(0, mScrollView.getTop());
 
         // vars
         EditText nameuser = (EditText) findViewById(R.id.form_nameuser);
@@ -141,7 +109,7 @@ public class ContactFormActivity extends AppCompatActivity {
 
         if (_continue) {
             // Validar email
-            _continue = isValidEmail(email.getText().toString());
+            _continue = Utility.isValidEmail(email.getText().toString());
 
             //está bien
             if (_continue) {
@@ -184,11 +152,13 @@ public class ContactFormActivity extends AppCompatActivity {
                         String urlLoad = urls.domain + urls.app_contact;
 
                         // Mostrar progreso
-                        mProgressDialog.setMessage("Espera un momento... ¡No te vallas!");
-                        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                        mProgressDialog.setMessage(":) Nos estamos conectando...\n¡No te vallas!");
+                        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                         mProgressDialog.setIndeterminate(true);
                         mProgressDialog.setProgress(0);
                         mProgressDialog.onStart();
+                        mProgressDialog.setCancelable(false);
+                        mProgressDialog.setCanceledOnTouchOutside(false);
                         mProgressDialog.show();
 
                         client.post(urlLoad, paramsMap, new AsyncHttpResponseHandler() {
@@ -220,25 +190,25 @@ public class ContactFormActivity extends AppCompatActivity {
                                         dialog.create().show();
 
                                         resetValues(buttonSend, true);
-                                        Log.d("appArrendatur", "Valid form contact: success!");
+                                        ConsoleLog.d("Valid form contact: success!");
 
                                     } else if (!load && type.equals("errors")) {
                                         // PHP dijo que no son validos
                                         String errors = object.getString("errors");
 
-                                        mTextInfo.setText(msg +"\n"+ errors);
-                                        showLayout(800, true);
+                                        mTextInfo.setText(msg + "\n" + errors);
+                                        Utility.toggleLayout(mLinearLayoutError, 800, true);
 
                                         resetValues(buttonSend, true);
-                                        Log.d("appArrendatur", "Valid form contact: errors-valid");
+                                        ConsoleLog.d("Valid form contact: errors-valid");
 
                                     } else if (!load && type.equals("server")) {
                                         // No hay referencia de la url a cargar
                                         mTextInfo.setText(msg);
-                                        showLayout(800, true, true, 4000, 500);
+                                        Utility.toggleLayout(mLinearLayoutError, 800, true, true, 10 * 1000, 500);
 
                                         resetValues(buttonSend, true);
-                                        Log.d("appArrendatur", "Valid form contact: errors-server");
+                                        ConsoleLog.d("Valid form contact: errors-server");
                                     }
 
                                 } catch (JSONException e) {
@@ -250,29 +220,29 @@ public class ContactFormActivity extends AppCompatActivity {
                             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                                 // No hay referencia de la url a cargar
                                 mTextInfo.setText(R.string.contact_error_network);
-                                showLayout(800, true, true, 4000, 500);
+                                Utility.toggleLayout(mLinearLayoutError, 800, true, true, 7 * 1000, 500);
 
                                 resetValues(buttonSend, true);
-                                Log.d("appArrendatur", "Valid form contact: not-network");
+                                ConsoleLog.d("Valid form contact: not-network");
                             }
                         });
 
                     } else {
                         // No hay referencia de la url a cargar
                         mTextInfo.setText(R.string.contact_error_url);
-                        showLayout(800, true, true, 3000, 500);
+                        Utility.toggleLayout(mLinearLayoutError, 800, true, true, 7 * 1000, 500);
 
                         resetValues(buttonSend);
-                        Log.d("appArrendatur", "Valid form contact: url-null");
+                        ConsoleLog.d("Valid form contact: url-null");
                     }
 
                 } else {
                     // No hay referencia de la url a cargar
                     mTextInfo.setText(R.string.contact_error_url);
-                    showLayout(800, true, true, 3000, 500);
+                    Utility.toggleLayout(mLinearLayoutError, 800, true, true, 7 * 1000, 500);
 
                     // No hay referencia de la url a cargar
-                    Log.d("appArrendatur", "Valid form contact: url-no-exists");
+                    ConsoleLog.d("Valid form contact: url-no-exists");
                     resetValues(buttonSend);
                 }
 
@@ -281,12 +251,12 @@ public class ContactFormActivity extends AppCompatActivity {
 
                 // Errores en el correo
                 resetValues(buttonSend);
-                Log.d("appArrendatur", "Valid form contact: email-invalid");
+                ConsoleLog.d("Valid form contact: email-invalid");
             }
         } else {
             // Errores en los campos
             resetValues(buttonSend);
-            Log.d("appArrendatur", "Valid form contact: inputs-emptys");
+            ConsoleLog.d("Valid form contact: inputs-emptys");
         }
     }
 
@@ -299,14 +269,13 @@ public class ContactFormActivity extends AppCompatActivity {
         buttonSend.setEnabled(true);
         _continue = true;
 
-        if(closeProgress){
-            mProgressDialog.setProgress(100);
-            mProgressDialog.dismiss();
+        if (closeProgress && mProgressDialog.isShowing()) {
+            try {
+                mProgressDialog.setProgress(100);
+                mProgressDialog.dismiss();
+            } catch (Exception e) {
+            }
         }
-    }
-
-    private static boolean isValidEmail(String email) {
-        return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     public void validText(EditText editText, String text, String msg) {

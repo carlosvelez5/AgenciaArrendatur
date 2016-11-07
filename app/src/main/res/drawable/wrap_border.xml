@@ -21,10 +21,10 @@
                 android:startColor="#f4f4f4"/>
 
             <corners
-                android:bottomLeftRadius="4dp"
-                android:bottomRightRadius="4dp"
-                android:topLeftRadius="4dp"
-                android:topRightRadius="4dp"/>
+                android:bottomLeftRadius="4px"
+                android:bottomRightRadius="4px"
+                android:topLeftRadius="4px"
+                android:topRightRadius="4px"/>
 
         </shape>
     </item>

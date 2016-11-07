@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +22,7 @@ import com.json.baseclass.SettingsBase;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.utility.ConsoleLog;
 import com.utility.DBAdapter;
 import com.utility.SettingsObj;
 
@@ -133,15 +133,15 @@ public class MainActivity extends AppCompatActivity
                         insertConfig(object.getString("data"));
 
                         // Obtener valor
-                        Log.d("appArrendatur", "Configuración: fue Actualizada!");
+                        ConsoleLog.d("Configuración: fue Actualizada!");
 
                     } else if (load && type.equals("updated")) {
                         // la configuracion de la app esta actualizada
-                        Log.d("appArrendatur", "Configuración: Actualizada!");
+                        ConsoleLog.d("Configuración: Actualizada!");
 
                     } else {
                         // nada que hacer
-                        Log.d("appArrendatur", "Configuración: nada!");
+                        ConsoleLog.d("Configuración: nada!");
                     }
 
                     // Invitar al usuario a actualizar la app
@@ -159,13 +159,13 @@ public class MainActivity extends AppCompatActivity
                 // Si no se ha podido cargar el archivo, pero hay configuración, dejarla como este
                 if (existsData) {
                     // config por defecto
-                    Log.d("appArrendatur", "Configuración: Igual!");
+                    ConsoleLog.d("Configuración: Igual!");
                 } else {
                     // Si no se ha podido cargar el archivo, y no hay en la bd, insertar una por default
                     insertConfig(jsonDefault);
 
                     // config por defecto
-                    Log.d("appArrendatur", "Configuración: Default!");
+                    ConsoleLog.d("Configuración: Default!");
                 }
             }
         });

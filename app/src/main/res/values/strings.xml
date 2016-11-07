@@ -10,7 +10,7 @@
     <string name="fa_arrow_right">{icon-speech}</string>
     <string name="fa_comment_o">{icon-note}</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Configuración</string>
     <string name="side_nave_descrition">Agencia Arrendatur</string>
     <string name="app_update">Actualizar</string>
     <string name="app_cancel">Cancelar</string>
@@ -33,4 +33,7 @@
     <string name="contact_error_url">¡Lo sentimos!, en este momento no podemos procesar tu información</string>
     <string name="contact_error_network">¡No nos pudimos conectar!\nPor favor, revisa tu conexión e inténtalo de nuevo</string>
     <string name="btn_ok">Volver</string>
+    <string name="fa_exclamation_triangle">{fa-exclamation-triangle}</string>
+    <string name="fa_exclamation">{fa-exclamation}</string>
+    <string name="network_offline">¡Recuerda que para comunicarte con nosotros, necesitas tener conexión a internet!</string>
 </resources>

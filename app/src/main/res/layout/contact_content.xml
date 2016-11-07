@@ -14,6 +14,7 @@
     tools:showIn="@layout/contact_all">
 
     <ScrollView
+        android:id="@+id/scrollContact"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="12dp"
@@ -23,6 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <include layout="@layout/wrap_msg_alert"/>
 
             <LinearLayout
                 style="@style/contact_ligth"
@@ -49,20 +52,7 @@
                                                      ext:documentView_textColor="#6b6b6b"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/contact_info"
-                style="@style/contact_error"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/contact_text_info"
-                    style="@style/contact_error.padding"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"/>
-            </LinearLayout>
+            <include layout="@layout/wrap_msg_error"/>
 
             <LinearLayout
                 style="@style/contact_item_form"

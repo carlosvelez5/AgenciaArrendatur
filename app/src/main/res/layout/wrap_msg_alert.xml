@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wrap_msg_alert"
+    style="@style/wrap_msg_alert"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/wrap_msg_alert"
+    android:orientation="horizontal">
+
+    <com.joanzapata.iconify.widget.IconTextView
+        style="@style/fa_base.alert"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="@string/fa_exclamation_triangle"/>
+
+    <TextView
+        android:id="@+id/wrap_msg_alert_text"
+        style="@style/wrap_content_alert"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+</LinearLayout>
