@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/wrap_msg_error"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:visibility="gone">
 
     <com.joanzapata.iconify.widget.IconTextView
         style="@style/fa_base.error"

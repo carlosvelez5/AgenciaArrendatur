@@ -10,12 +10,16 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.json.baseclass.SettingsUrl;
@@ -26,10 +30,13 @@ import com.utility.ConsoleLog;
 import com.utility.DBAdapter;
 import com.utility.SettingsObj;
 import com.utility.Utility;
+import com.utility.UtilityAnimate;
 import com.utility.UtilityNetwork;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -41,6 +48,7 @@ public class ContactFormActivity extends AppCompatActivity {
     private TextView mTextInfo;
     private ProgressDialog mProgressDialog;
     private ScrollView mScrollView;
+    private ArrayList<View> listInputError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,22 +68,6 @@ public class ContactFormActivity extends AppCompatActivity {
         mProgressDialog = new ProgressDialog(ContactFormActivity.this);
         mScrollView = (ScrollView) findViewById(R.id.scrollContact);
 
-        // comprobar si hay conexion a internet
-        if (UtilityNetwork.isOnline(this)) {
-            // Oculto el mensaje
-            Utility.toggleLayout(mLinearLayoutAlert, 0, false);
-        } else {
-            // Le Agrego el texto y lo muestro por 10 segundos
-            TextView textViewAlert = (TextView) findViewById(R.id.wrap_msg_alert_text);
-            textViewAlert.setText(R.string.network_offline);
-
-            // Ocultar
-            Utility.toggleLayout(mLinearLayoutAlert, 0, true, true, 10*1000, 800);
-        }
-
-        // ocultar
-        Utility.toggleLayout(mLinearLayoutError, 0, false);
-
         // Cargar
         final Button buttonSend = (Button) findViewById(R.id.buttonSend);
         buttonSend.setOnClickListener(new View.OnClickListener() {
@@ -85,8 +77,71 @@ public class ContactFormActivity extends AppCompatActivity {
                 sendMsgAction(view, buttonSend);
             }
         });
+
+        // Ocultar teclado
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // comprobar si hay conexion a internet
+        if (UtilityNetwork.isOnline(this)) {
+            // Oculto el mensaje
+            UtilityAnimate.toggleLayout(mLinearLayoutAlert, 0, false);
+
+        } else {
+            // Le Agrego el texto y lo muestro por 10 segundos
+            TextView textViewAlert = (TextView) findViewById(R.id.wrap_msg_alert_text);
+            textViewAlert.setText(R.string.network_offline);
+
+            // Mostrar
+            UtilityAnimate.toggleLayout(mLinearLayoutAlert, 800, true, true, 5 * 1000, 600);
+        }
+
+        // ocultar
+        UtilityAnimate.toggleLayout(mLinearLayoutError, 0, false);
+
+        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onPause() {
+        Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Valida y envia el formulario.
+     *
+     * @param v          Boton
+     * @param buttonSend Boton
+     */
     public void sendMsgAction(View v, final Button buttonSend) {
         // Desactivar boton
         buttonSend.setEnabled(false);
@@ -102,6 +157,7 @@ public class ContactFormActivity extends AppCompatActivity {
         EditText text = (EditText) findViewById(R.id.form_text);
 
         //Verificar datos
+        listInputError = new ArrayList<>();
         validText(nameuser, nameuser.getText().toString().trim(), getString(R.string.contact_error_name));
         validText(email, email.getText().toString().trim(), getString(R.string.contact_error_email));
         validText(subjet, subjet.getText().toString().trim(), getString(R.string.contact_error_subjet));
@@ -197,7 +253,7 @@ public class ContactFormActivity extends AppCompatActivity {
                                         String errors = object.getString("errors");
 
                                         mTextInfo.setText(msg + "\n" + errors);
-                                        Utility.toggleLayout(mLinearLayoutError, 800, true);
+                                        UtilityAnimate.toggleLayout(mLinearLayoutError, 800, true);
 
                                         resetValues(buttonSend, true);
                                         ConsoleLog.d("Valid form contact: errors-valid");
@@ -205,7 +261,7 @@ public class ContactFormActivity extends AppCompatActivity {
                                     } else if (!load && type.equals("server")) {
                                         // No hay referencia de la url a cargar
                                         mTextInfo.setText(msg);
-                                        Utility.toggleLayout(mLinearLayoutError, 800, true, true, 10 * 1000, 500);
+                                        UtilityAnimate.toggleLayout(mLinearLayoutError, 800, true, true, 10 * 1000, 500);
 
                                         resetValues(buttonSend, true);
                                         ConsoleLog.d("Valid form contact: errors-server");
@@ -220,17 +276,17 @@ public class ContactFormActivity extends AppCompatActivity {
                             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                                 // No hay referencia de la url a cargar
                                 mTextInfo.setText(R.string.contact_error_network);
-                                Utility.toggleLayout(mLinearLayoutError, 800, true, true, 7 * 1000, 500);
+                                UtilityAnimate.toggleLayout(mLinearLayoutError, 800, true, true, 7 * 1000, 500);
 
                                 resetValues(buttonSend, true);
-                                ConsoleLog.d("Valid form contact: not-network");
+                                ConsoleLog.d("Valid form contact: not-network, code:" + statusCode);
                             }
                         });
 
                     } else {
                         // No hay referencia de la url a cargar
                         mTextInfo.setText(R.string.contact_error_url);
-                        Utility.toggleLayout(mLinearLayoutError, 800, true, true, 7 * 1000, 500);
+                        UtilityAnimate.toggleLayout(mLinearLayoutError, 800, true, true, 7 * 1000, 500);
 
                         resetValues(buttonSend);
                         ConsoleLog.d("Valid form contact: url-null");
@@ -239,7 +295,7 @@ public class ContactFormActivity extends AppCompatActivity {
                 } else {
                     // No hay referencia de la url a cargar
                     mTextInfo.setText(R.string.contact_error_url);
-                    Utility.toggleLayout(mLinearLayoutError, 800, true, true, 7 * 1000, 500);
+                    UtilityAnimate.toggleLayout(mLinearLayoutError, 800, true, true, 7 * 1000, 500);
 
                     // No hay referencia de la url a cargar
                     ConsoleLog.d("Valid form contact: url-no-exists");
@@ -248,12 +304,29 @@ public class ContactFormActivity extends AppCompatActivity {
 
             } else {
                 email.setError(getString(R.string.contact_error_email_invalid));
+                email.requestFocus();
+                YoYo.with(Techniques.Shake).duration(700).playOn((LinearLayout) email.getParent());
 
                 // Errores en el correo
                 resetValues(buttonSend);
                 ConsoleLog.d("Valid form contact: email-invalid");
             }
         } else {
+            // Recorrer y animar
+            for (View aListInputError : listInputError) {
+                YoYo.with(Techniques.Shake).duration(700).playOn(aListInputError);
+            }
+
+            // Obtener primer elemento y ponerle el focus
+            LinearLayout mFirstElement = (LinearLayout) listInputError.get(0);
+            for (int j = 0; j < mFirstElement.getChildCount(); j++) {
+                if (mFirstElement.getChildAt(j) instanceof EditText) {
+                    // Poner focus
+                    mFirstElement.getChildAt(j).requestFocus();
+                    break;
+                }
+            }
+
             // Errores en los campos
             resetValues(buttonSend);
             ConsoleLog.d("Valid form contact: inputs-emptys");
@@ -269,7 +342,7 @@ public class ContactFormActivity extends AppCompatActivity {
         buttonSend.setEnabled(true);
         _continue = true;
 
-        if (closeProgress && mProgressDialog.isShowing()) {
+        if (closeProgress && mProgressDialog != null && mProgressDialog.isShowing()) {
             try {
                 mProgressDialog.setProgress(100);
                 mProgressDialog.dismiss();
@@ -281,8 +354,17 @@ public class ContactFormActivity extends AppCompatActivity {
     public void validText(EditText editText, String text, String msg) {
         //Implementamos la validación que queramos
         if (TextUtils.isEmpty(text)) {
+            // Añadir error
             editText.setError(msg);
+
+            // Agregar al array para luego animarlo
+            listInputError.add((LinearLayout) editText.getParent());
+
+            // No continuar
             _continue = false;
+        } else {
+            // Quitar mensaje
+            editText.setError(null);
         }
     }
 

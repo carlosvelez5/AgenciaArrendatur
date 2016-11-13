@@ -75,7 +75,6 @@
 
                     <LinearLayout
                         style="@style/from_separator_icon">
-
                     </LinearLayout>
 
                     <EditText
@@ -197,7 +196,7 @@
                 android:id="@+id/buttonSend"
                 style="@style/contact_item.btn.green"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@drawable/btn_green_ligth"
                 android:text="@string/contact_btn_send"/>

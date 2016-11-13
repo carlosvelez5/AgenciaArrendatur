@@ -48,13 +48,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_base);
 
-        // Cargar configuración de la base de datos
-        mDBAdapter = new DBAdapter(this);
-        mDBAdapter.open();
-
-        // cargar configuración
-        onLoadSettings();
-
         // Abrir activity de contacto
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
@@ -76,6 +69,18 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Cargar configuración de la base de datos
+        mDBAdapter = new DBAdapter(this);
+        mDBAdapter.open();
+
+        // cargar configuración
+        onLoadSettings();
     }
 
     // Cargar configuracion de la base de datos
