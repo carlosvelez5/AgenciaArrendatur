@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 
 /**
  * Created by Carlos VÉLEZ on 06/11/2016.
+ * UtilityNetwork: Clase para verificar si el dispositivo tiene conexiones
  */
 
 public class UtilityNetwork {
@@ -106,9 +107,9 @@ public class UtilityNetwork {
         // Recupera todas las redes (tanto móviles como wifi)
         NetworkInfo[] redes = connec.getAllNetworkInfo();
 
-        for (int i = 0; i < redes.length; i++) {
+        for (NetworkInfo rede : redes) {
             // Si alguna red tiene conexión, se devuelve true
-            if (redes[i].getState() == NetworkInfo.State.CONNECTED) {
+            if (rede.getState() == NetworkInfo.State.CONNECTED) {
                 connected = true;
             }
         }

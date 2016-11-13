@@ -2,6 +2,7 @@ package com.utility;
 
 /**
  * Created by Carlos VÉLEZ on 01/11/2016.
+ * SettingsObj: Clase padre de las settings de la App
  */
 
 public class SettingsObj {

@@ -13,6 +13,7 @@ import static com.joanzapata.iconify.Iconify.with;
 
 /**
  * Created by Carlos VÉLEZ on 06/11/2016.
+ * Utility Clase con algunas utilidades
  */
 
 public class Utility {

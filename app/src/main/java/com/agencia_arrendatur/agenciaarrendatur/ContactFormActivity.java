@@ -42,7 +42,6 @@ import cz.msebera.android.httpclient.Header;
 
 public class ContactFormActivity extends AppCompatActivity {
     boolean _continue = true;
-    private DBAdapter mDBAdapter;
     private LinearLayout mLinearLayoutError;
     private LinearLayout mLinearLayoutAlert;
     private TextView mTextInfo;
@@ -170,7 +169,7 @@ public class ContactFormActivity extends AppCompatActivity {
             //está bien
             if (_continue) {
                 // Cargar configuración de la base de datos
-                mDBAdapter = new DBAdapter(this);
+                DBAdapter mDBAdapter = new DBAdapter(this);
                 mDBAdapter.open();
 
                 // Cargar configuracion de la BD
@@ -248,23 +247,25 @@ public class ContactFormActivity extends AppCompatActivity {
                                         resetValues(buttonSend, true);
                                         ConsoleLog.d("Valid form contact: success!");
 
-                                    } else if (!load && type.equals("errors")) {
-                                        // PHP dijo que no son validos
-                                        String errors = object.getString("errors");
+                                    } else {
+                                        if (type.equals("errors")) {
+                                            // PHP dijo que no son validos
+                                            String errors = object.getString("errors");
 
-                                        mTextInfo.setText(msg + "\n" + errors);
-                                        UtilityAnimate.toggleLayout(mLinearLayoutError, 800, true);
+                                            mTextInfo.setText(msg + "\n" + errors);
+                                            UtilityAnimate.toggleLayout(mLinearLayoutError, 800, true);
 
-                                        resetValues(buttonSend, true);
-                                        ConsoleLog.d("Valid form contact: errors-valid");
+                                            resetValues(buttonSend, true);
+                                            ConsoleLog.d("Valid form contact: errors-valid");
 
-                                    } else if (!load && type.equals("server")) {
-                                        // No hay referencia de la url a cargar
-                                        mTextInfo.setText(msg);
-                                        UtilityAnimate.toggleLayout(mLinearLayoutError, 800, true, true, 10 * 1000, 500);
+                                        } else if (type.equals("server")) {
+                                            // No hay referencia de la url a cargar
+                                            mTextInfo.setText(msg);
+                                            UtilityAnimate.toggleLayout(mLinearLayoutError, 800, true, true, 10 * 1000, 500);
 
-                                        resetValues(buttonSend, true);
-                                        ConsoleLog.d("Valid form contact: errors-server");
+                                            resetValues(buttonSend, true);
+                                            ConsoleLog.d("Valid form contact: errors-server");
+                                        }
                                     }
 
                                 } catch (JSONException e) {
@@ -347,6 +348,7 @@ public class ContactFormActivity extends AppCompatActivity {
                 mProgressDialog.setProgress(100);
                 mProgressDialog.dismiss();
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

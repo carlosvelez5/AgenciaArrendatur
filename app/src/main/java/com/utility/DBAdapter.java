@@ -10,20 +10,21 @@ import android.util.Log;
 
 /**
  * Created by Carlos VÉLEZ on 01/11/2016.
+ * DBAdapter, Adaptador para conectarme a la base de datos
  */
 
 public class DBAdapter {
     //estos son los nombres de las columnas
-    public static final String COL_ID = "_id";
-    public static final String COL_KEY = "key_param";
-    public static final String COL_VALUE = "key_value";
-    public static final String COL_TYPE = "key_type";
+    private static final String COL_ID = "_id";
+    private static final String COL_KEY = "key_param";
+    private static final String COL_VALUE = "key_value";
+    private static final String COL_TYPE = "key_type";
 
     //estos son los índices correspoindientes
-    public static final int INDEX_ID = 0;
-    public static final int INDEX_PARAM = INDEX_ID + 1;
-    public static final int INDEX_VALUE = INDEX_ID + 2;
-    public static final int INDEX_TYPE = INDEX_ID + 3;
+    private static final int INDEX_ID = 0;
+    private static final int INDEX_PARAM = INDEX_ID + 1;
+    private static final int INDEX_VALUE = INDEX_ID + 2;
+    private static final int INDEX_TYPE = INDEX_ID + 3;
 
     // usado for logging
     private static final String TAG = "SettingsAppArrendatur";
@@ -96,11 +97,11 @@ public class DBAdapter {
             cursor.moveToFirst();
 
         return new SettingsObj(
-                cursor.getInt(INDEX_ID),
-                cursor.getString(INDEX_PARAM),
-                cursor.getString(INDEX_VALUE),
-                cursor.getString(INDEX_TYPE),
-                cursor.getCount()
+                cursor != null ? cursor.getInt(INDEX_ID) : 0,
+                cursor != null ? cursor.getString(INDEX_PARAM) : null,
+                cursor != null ? cursor.getString(INDEX_VALUE) : null,
+                cursor != null ? cursor.getString(INDEX_TYPE) : null,
+                cursor != null ? cursor.getCount() : 0
         );
     }
 

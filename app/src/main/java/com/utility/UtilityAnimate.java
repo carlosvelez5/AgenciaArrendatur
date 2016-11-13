@@ -8,6 +8,7 @@ import android.view.ViewPropertyAnimator;
 
 /**
  * Created by Carlos VÉLEZ on 07/11/2016.
+ * UtilityAnimate: Clase para realizar algunas animaciones
  */
 
 public class UtilityAnimate {

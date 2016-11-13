@@ -4,11 +4,12 @@ import android.util.Log;
 
 /**
  * Created by Carlos VÉLEZ on 06/11/2016.
+ *
  */
 
 public class ConsoleLog {
     // Tag para filtrar en la consola
-    public static String tag = "appArrendatur";
+    private static String tag = "appArrendatur";
 
     // Contructor
     public ConsoleLog() {
